@@ -455,6 +455,7 @@ textarea.input {
 
 .header-logo .logo img {
   display: block;
+  max-width: 300px;
 }
 
 /*----------------------------*\
@@ -789,7 +790,7 @@ textarea.input {
   padding: 60px 0px;
   margin: 30px 0px;
   background-color: #E4E7ED;
-  background-image: url('../../templates/shop/img/hotdeal.png');
+  background-image: url('../img/hotdeal.png');
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -871,7 +872,10 @@ textarea.input {
 }
 
 .product .product-img>img {
-  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
 }
 
 .product .product-img .product-label {
