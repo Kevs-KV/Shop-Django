@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Gallery
+from .models import Category, Product, Gallery, Comment
 
 
 @admin.register(Category)
@@ -17,3 +17,9 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['image', 'product']
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'product', 'created', 'active']
+    list_filter = ['active', 'created', 'updated']
+    search_fields = ['name', 'email', 'body']
