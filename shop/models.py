@@ -59,6 +59,8 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
+    rating = models.IntegerField(default=0)
+
 
     class Meta:
         ordering = ('created',)
