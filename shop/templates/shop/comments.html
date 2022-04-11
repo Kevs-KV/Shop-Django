@@ -1,4 +1,5 @@
 {% extends "shop/product.html" %}
+{% load crispy_forms_tags %}
 {% block comments %}
     <div class="col-md-12">
         <div id="product-tab">
@@ -152,21 +153,7 @@
                     <div class="col-md-3">
                         <div id="review-form">
                             <form class="review-form" method="POST">
-                                {{ comment_form.as_p }}
-                                {% csrf_token %}
-                                <div class="input-rating">
-                                    <span>Your Rating: </span>
-                                    <div class="stars">
-                                        {{ comment_form.star5 }}<label for="star5">5</label>
-                                        {{ comment_form.star4 }}<label for="star4">4</label>
-                                        {{ comment_form.star3 }}<label for="star3">3</label>
-                                        {{ comment_form.star2 }}<label for="star2">2</label>
-                                        {{ comment_form.star1 }}<label for="star1">1</label>
-                                    </div>
-
-                                </div>
-                                {{ comment_form.or }}
-                                <button class="primary-btn">Submit</button>
+                                {% crispy comment_form %}
                             </form>
                         </div>
                     </div>
