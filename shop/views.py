@@ -31,7 +31,7 @@ def product_comment(request, id, slug):
     gallery = Gallery.objects.filter(product=id)
     new_comment = None
     # Show 25 contacts per page.
-    if request.method == 'POST' and 'add_comment' in request.POST:
+    if request.method == 'POST':
         # Пользователь отправил комментарий.
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
