@@ -5,7 +5,7 @@
             <!-- product tab nav -->
             <ul class="tab-nav">
                 <li class="active"><a href="#tab1">Description</a></li>
-                    <li><a href="{% url 'shop:product_comment' id=product.id slug=product.slug %}">Reviews
+                    <li><a href="{% url 'shop:product_comment' id=product.id slug=product.slug page_num=1 %}">Reviews
                         ({{ comments|length }})</a></li>
             </ul>
             <div class="tab-pane fade in active">
