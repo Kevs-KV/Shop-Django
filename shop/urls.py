@@ -10,7 +10,7 @@ app_name = 'shop'
 urlpatterns = [
     path('', views.product_list, name='product_list'),
     path('<int:id>/<slug:slug>/', views.product_detail, name='product_detail'),
-    path('<int:id>/<slug:slug>/comments/<int:page_num>/', views.product_comment, name='product_comment'),
+    path('<int:id>/<slug:slug>/comments/<int:page_num>/', views.ViewCreateProductComment.as_view(), name='product_comment'),
 ]
 
 
