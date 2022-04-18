@@ -1,5 +1,6 @@
 from collections import Counter
 
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, DetailView
@@ -40,18 +41,23 @@ class ViewCreateProductComment(FormView):
     paginate_by = 5
     model = Comment
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(ViewCreateProductComment, self).get_context_data(**kwargs)
         kwargs = self.kwargs
         context['id'] = kwargs['id']
         context['slug'] = kwargs['slug']
         context['product'] = get_object_or_404(Product, id=context['id'], slug=context['slug'], available=True)
-        context['comments_list'] = context['product'].comments.filter(active=True)
+        comments_list = context['product'].comments.filter(active=True)
+        paginator = Paginator(comments_list, self.paginate_by)
+        page = paginator.get_page(kwargs['page_num'])
+        context['page'] = page
+        context['comments_list'] = page.object_list
         context['gallery'] = Gallery.objects.filter(product=context['id'])
-        context['rating_comments'] = [com.rating for com in context['comments_list']]
+        context['rating_comments'] = [comment.rating for comment in context['comments_list']]
         context['average_rating'] = round(sum(context['rating_comments']) / len(context['comments_list']), 1)
         context['len_comments_list'] = len(context['comments_list'])
         context['rating_comments'] = Counter(context['rating_comments'])
+        print(context)
         return context
 
     def form_valid(self, form):
