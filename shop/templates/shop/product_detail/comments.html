@@ -1,4 +1,4 @@
-{% extends "shop/product.html" %}
+{% extends "shop/product_detail/product.html" %}
 {% load crispy_forms_tags %}
 {% block comments %}
     <div class="col-md-12">
@@ -139,11 +139,13 @@
                                     </ul>
                                 {% endfor %}
                             <ul class="reviews-pagination">
-                                <li class="active">1</li>
-                                <li><a href="{% url 'shop:product_comment' id=product.id slug=product.slug page_num=2 %}">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+                                {% for p in page.paginator.page_range %}
+                                    {% if page_num == p %}
+                                    <li class="active" ><a href="{% url 'shop:product_comment' id=product.id slug=product.slug page_num=p %}">{{ p }}</a></li>
+                                    {% else %}
+                                    <li><a href="{% url 'shop:product_comment' id=product.id slug=product.slug page_num=p %}">{{ p }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
