@@ -10,7 +10,7 @@ from .models import Category, Product, Gallery, Comment
 
 
 class ViewProductList(ListView):
-    template_name = 'shop/index.html'
+    template_name = 'shop/product_detail/index.html'
     model = Product
 
     def get_context_data(self, *args, **kwargs):
@@ -23,7 +23,7 @@ class ViewProductList(ListView):
 
 
 class ViewProductDetail(DetailView):
-    template_name = 'shop/detail.html'
+    template_name = 'shop/product_detail/detail.html'
     model = Product
 
     def get_context_data(self, **kwargs):
@@ -34,9 +34,8 @@ class ViewProductDetail(DetailView):
         context['comments'] = context['product'].comments.filter(active=True)
         return context
 
-
 class ViewCreateProductComment(FormView):
-    template_name = 'shop/comments.html'
+    template_name = 'shop/product_detail/comments.html'
     form_class = CommentForm
     paginate_by = 5
     model = Comment
@@ -45,6 +44,7 @@ class ViewCreateProductComment(FormView):
         context = super(ViewCreateProductComment, self).get_context_data(**kwargs)
         kwargs = self.kwargs
         context['id'] = kwargs['id']
+        context['page_num'] = kwargs['page_num']
         context['slug'] = kwargs['slug']
         context['product'] = get_object_or_404(Product, id=context['id'], slug=context['slug'], available=True)
         comments_list = context['product'].comments.filter(active=True)
@@ -53,11 +53,10 @@ class ViewCreateProductComment(FormView):
         context['page'] = page
         context['comments_list'] = page.object_list
         context['gallery'] = Gallery.objects.filter(product=context['id'])
-        context['rating_comments'] = [comment.rating for comment in context['comments_list']]
-        context['average_rating'] = round(sum(context['rating_comments']) / len(context['comments_list']), 1)
-        context['len_comments_list'] = len(context['comments_list'])
+        context['rating_comments'] = [comment.rating for comment in comments_list]
+        context['average_rating'] = round(sum(context['rating_comments']) / len(comments_list), 1)
+        context['len_comments_list'] = len(comments_list)
         context['rating_comments'] = Counter(context['rating_comments'])
-        print(context)
         return context
 
     def form_valid(self, form):
@@ -76,3 +75,19 @@ class ViewCreateProductComment(FormView):
     def get_success_url(self):
         context = self.get_context_data()
         return reverse('shop:product_comment', kwargs={'id': context['id'], 'slug': context['slug'], 'page_num': 1})
+
+
+
+class ViewProductListForCategory(ListView):
+    template_name = 'shop/store.html'
+    model = Product
+
+
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+    def get_queryset(self):
+        return Product.objects.filter(available=True)
