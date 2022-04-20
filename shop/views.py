@@ -1,12 +1,22 @@
 from collections import Counter
 
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, DetailView
 
 from .forms import CommentForm
-from .models import Category, Product, Gallery, Comment
+from .models import Category, Product, Gallery, Comment, Brand
+
+
+class GetCategoryBrand:
+
+    def get_category(self):
+        return Category.objects.all()
+
+    def get_brand(self):
+        return Brand.objects.all()
 
 
 class ViewProductList(ListView):
@@ -33,6 +43,7 @@ class ViewProductDetail(DetailView):
         context['gallery'] = Gallery.objects.filter(product=kwargs['id'])
         context['comments'] = context['product'].comments.filter(active=True)
         return context
+
 
 class ViewCreateProductComment(FormView):
     template_name = 'shop/product_detail/comments.html'
@@ -77,12 +88,9 @@ class ViewCreateProductComment(FormView):
         return reverse('shop:product_comment', kwargs={'id': context['id'], 'slug': context['slug'], 'page_num': 1})
 
 
-
-class ViewProductListForCategory(ListView):
+class ViewProductListForCategory(GetCategoryBrand, ListView):
     template_name = 'shop/store.html'
     model = Product
-
-
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -91,3 +99,12 @@ class ViewProductListForCategory(ListView):
 
     def get_queryset(self):
         return Product.objects.filter(available=True)
+
+
+
+class ViewFilterProductList(GetCategoryBrand, ListView):
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(Q(category__name=self.request.GET.get('category')) |
+                                          Q(brand__name=self.request.GET.get('category')))
+        return queryset
