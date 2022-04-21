@@ -65,7 +65,10 @@ class ViewCreateProductComment(FormView):
         context['comments_list'] = page.object_list
         context['gallery'] = Gallery.objects.filter(product=context['id'])
         context['rating_comments'] = [comment.rating for comment in comments_list]
-        context['average_rating'] = round(sum(context['rating_comments']) / len(comments_list), 1)
+        try:
+            context['average_rating'] = round(sum(context['rating_comments']) / len(comments_list), 1)
+        except ZeroDivisionError:
+            context['average_rating'] = 0
         context['len_comments_list'] = len(comments_list)
         context['rating_comments'] = Counter(context['rating_comments'])
         return context
@@ -91,10 +94,12 @@ class ViewCreateProductComment(FormView):
 class ViewProductListForCategory(GetCategoryBrand, ListView):
     template_name = 'shop/store.html'
     model = Product
+    paginate_by = 9
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['categories'] = Category.objects.all()
+        product = Product.objects.all()
+        print(product)
         return context
 
     def get_queryset(self):
@@ -102,9 +107,11 @@ class ViewProductListForCategory(GetCategoryBrand, ListView):
 
 
 
-class ViewFilterProductList(GetCategoryBrand, ListView):
+class ViewFilterProductList(ViewProductListForCategory):
 
     def get_queryset(self):
-        queryset = Product.objects.filter(Q(category__name=self.request.GET.get('category')) |
-                                          Q(brand__name=self.request.GET.get('category')))
-        return queryset
+        price_min=self.request.GET.get('price-min')
+        price_max=self.request.GET.get('price-max')
+        return Product.objects.filter(Q(category__name__in=self.request.GET.getlist('category')) |
+                                          Q(brand__name__in=self.request.GET.getlist('brand')) |
+                                      Q(price__range=(price_min, price_max)))
