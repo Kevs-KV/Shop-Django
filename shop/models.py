@@ -52,6 +52,12 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.id, self.slug])
 
+    @property
+    def rating(self):
+        comment = Comment.objects.filter(pruduct=self.name)
+        print(comment)
+        return round(sum(comment.rating) / len(comment), 1)
+
 
 class Gallery(models.Model):
     image = models.ImageField(upload_to='gallery')
