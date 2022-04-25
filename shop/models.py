@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 
@@ -53,10 +54,12 @@ class Product(models.Model):
         return reverse('shop:product_detail', args=[self.id, self.slug])
 
     @property
-    def rating(self):
-        comment = Comment.objects.filter(pruduct=self.name)
-        print(comment)
-        return round(sum(comment.rating) / len(comment), 1)
+    def get_rating(self):
+        product = get_object_or_404(Product, id=self.id, available=True)
+        comments = product.comments.filter(active=True)
+        rating_list = [comment.rating for comment in comments]
+        rating = round(sum(rating_list) / len(comments), 1)
+        return rating
 
 
 class Gallery(models.Model):

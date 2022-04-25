@@ -153,27 +153,27 @@
 										<h3 class="product-name"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
 										<h4 class="product-price">{{ product.price }} <del class="product-old-price">$990.00</del></h4>
 										<div class="product-rating">
-                                                    {% if product.rating >= 1  %}
+                                                    {% if product.get_rating >= 1  %}
                                                         <i class="fa fa-star"></i>
                                                     {% else %}
                                                         <i class="fa fa-star-o empty"></i>
                                                     {% endif %}
-                                                    {% if product.rating >= 2  %}
+                                                    {% if product.get_rating >= 2  %}
                                                         <i class="fa fa-star"></i>
                                                     {% else %}
                                                         <i class="fa fa-star-o empty"></i>
                                                     {% endif %}
-                                                    {% if product.rating >= 3 %}
+                                                    {% if product.get_rating >= 3 %}
                                                         <i class="fa fa-star"></i>
                                                     {% else %}
                                                         <i class="fa fa-star-o empty"></i>
                                                     {% endif %}
-                                                    {% if product.rating >= 4 %}
+                                                    {% if product.get_rating >= 4 %}
                                                         <i class="fa fa-star"></i>
                                                     {% else %}
                                                         <i class="fa fa-star-o empty"></i>
                                                     {% endif %}
-                                                    {% if product.rating == 5 %}
+                                                    {% if product.get_rating == 5 %}
                                                         <i class="fa fa-star"></i>
                                                     {% else %}
                                                         <i class="fa fa-star-o empty"></i>

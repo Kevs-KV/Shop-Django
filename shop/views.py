@@ -18,6 +18,12 @@ class GetCategoryBrand:
     def get_brand(self):
         return Brand.objects.all()
 
+    def get_rating(self, name):
+        comments = Product.objects.filter(name=name).comments.filter(active=True)
+        rating_list = [comment.rating for comment in comments]
+        rating = round(sum(rating_list) / len(comments), 1)
+        return rating
+
 
 class ViewProductList(ListView):
     template_name = 'shop/product_detail/index.html'
@@ -98,20 +104,17 @@ class ViewProductListForCategory(GetCategoryBrand, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        product = Product.objects.all()
-        print(product)
         return context
 
     def get_queryset(self):
         return Product.objects.filter(available=True)
 
 
-
 class ViewFilterProductList(ViewProductListForCategory):
 
     def get_queryset(self):
-        price_min=self.request.GET.get('price-min')
-        price_max=self.request.GET.get('price-max')
+        price_min = self.request.GET.get('price-min')
+        price_max = self.request.GET.get('price-max')
         return Product.objects.filter(Q(category__name__in=self.request.GET.getlist('category')) |
-                                          Q(brand__name__in=self.request.GET.getlist('brand')) |
-                                      Q(price__range=(price_min, price_max)))
+                                      Q(brand__name__in=self.request.GET.getlist('brand'))).filter(
+            price__range=(price_min, price_max))
