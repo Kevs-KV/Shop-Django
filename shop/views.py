@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, DetailView
-
+from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from .forms import CommentForm
 from .models import Category, Product, Gallery, Comment, Brand
@@ -26,7 +26,10 @@ class ViewProductList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        context['cart_product_form'] = CartAddProductForm()
         context['categories'] = Category.objects.all()
+        context['cart'] = Cart(self.request)
+        context['len_cart'] = Cart(self.request).__len__()
         return context
 
     def get_queryset(self):
