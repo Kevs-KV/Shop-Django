@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import FormView, ListView, DetailView
 
+from cart.forms import CartAddProductForm
 from .forms import CommentForm
 from .models import Category, Product, Gallery, Comment, Brand
 
@@ -17,12 +18,6 @@ class GetCategoryBrand:
 
     def get_brand(self):
         return Brand.objects.all()
-
-    def get_rating(self, name):
-        comments = Product.objects.filter(name=name).comments.filter(active=True)
-        rating_list = [comment.rating for comment in comments]
-        rating = round(sum(rating_list) / len(comments), 1)
-        return rating
 
 
 class ViewProductList(ListView):
@@ -45,6 +40,7 @@ class ViewProductDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         kwargs = self.kwargs
+        context['cart_product_form'] = CartAddProductForm()
         context['product'] = get_object_or_404(Product, id=kwargs['id'], slug=kwargs['slug'], available=True)
         context['gallery'] = Gallery.objects.filter(product=kwargs['id'])
         context['comments'] = context['product'].comments.filter(active=True)
