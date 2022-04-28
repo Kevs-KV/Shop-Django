@@ -1,4 +1,5 @@
 {% load static %}
+{% load news_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,7 +107,8 @@
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
                                 <span>Your Cart</span>
-                                <div class="qty">{{ len_cart }}</div>
+                                {% get_cart as cart %}
+                                <div class="qty">{{ cart.get_len_cart}}</div>
                             </a>
                             <div class="cart-dropdown">
                                 <div class="cart-list">
@@ -126,7 +128,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="cart-summary">
-                                    <small>{{ len_cart }} Item(s) selected</small>
+                                    <small>{{ cart.get_len_cart }} Item(s) selected</small>
                                     <h5>SUBTOTAL: {{cart.get_total_price}}</h5>
                                 </div>
                                 <div class="cart-btns">

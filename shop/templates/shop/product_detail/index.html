@@ -94,7 +94,7 @@
                                         <form action="{% url 'cart:cart_add' p.id %}" method="post">
                                             {{ cart_product_form }}
                                             {% csrf_token %}
-                                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>
+                                        <button class="add-to-cart-btn">Add<i class="fa fa-shopping-cart"></i>
                                         </button>
                                         </form>
                                     </div>

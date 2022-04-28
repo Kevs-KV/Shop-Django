@@ -28,8 +28,8 @@ class ViewProductList(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['cart_product_form'] = CartAddProductForm()
         context['categories'] = Category.objects.all()
-        context['cart'] = Cart(self.request)
-        context['len_cart'] = Cart(self.request).__len__()
+        # context['cart'] = Cart(self.request)
+        # context['len_cart'] = Cart(self.request).__len__()
         return context
 
     def get_queryset(self):
