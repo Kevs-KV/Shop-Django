@@ -8,6 +8,7 @@ from shop.models import Product
 class Cart:
 
     def __init__(self, request):
+        self.request = request
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
@@ -56,3 +57,7 @@ class Cart:
     def clear(self):
         del self.session[settings.CART_SESSION_ID]
         self.save()
+
+    @property
+    def get_len_cart(self):
+        return Cart(self.request).__len__()
