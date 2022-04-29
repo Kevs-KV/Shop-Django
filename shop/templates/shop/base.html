@@ -169,13 +169,12 @@
         <div id="responsive-nav">
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
+                <li class="active"><a href="{% url 'shop:product_list' %}">Home</a></li>
                 <li><a href="#">Hot Deals</a></li>
-                <li><a href="#">Categories</a></li>
-                {% for c in categories %}
-                <li {% if category.slug == c.slug %}
-                    {% endif %}>
-                    <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                <li><a href="{% url 'shop:store' %}">All Categories</a></li>
+                {% for category in categories %}
+                <li>
+                    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
                 </li>
                 {% endfor %}
 
