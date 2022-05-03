@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Category, Product, Gallery, Comment, Brand
+
+from .models import Category, Product, Gallery, Comment, Brand, Ip
 
 
 @admin.register(Category)
@@ -7,9 +8,11 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
 
+
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
     list_display = ['name']
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -18,12 +21,19 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
+
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['image', 'product']
+
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'product', 'created', 'active', 'rating']
     list_filter = ['active', 'created', 'updated']
     search_fields = ['name', 'email', 'body']
+
+
+@admin.register(Ip)
+class IpUserAdmin(admin.ModelAdmin):
+    list_display = ['ip']

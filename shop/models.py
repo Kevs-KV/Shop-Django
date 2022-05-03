@@ -27,6 +27,13 @@ class Brand(models.Model):
         return self.name
 
 
+class Ip(models.Model):
+    ip = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.ip
+
+
 class Product(models.Model):
     category = models.ForeignKey(Category,
                                  related_name='products',
@@ -42,6 +49,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    ip_view = models.ManyToManyField(Ip, related_name="post_views", blank=True)
 
     class Meta:
         ordering = ('name',)
@@ -60,6 +68,10 @@ class Product(models.Model):
         rating_list = [comment.rating for comment in comments]
         rating = round(sum(rating_list) / len(comments), 1)
         return rating
+
+    @property
+    def total_views(self):
+        return self.ip_view.count()
 
 
 class Gallery(models.Model):

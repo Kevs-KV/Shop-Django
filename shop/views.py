@@ -4,11 +4,13 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, ListView, DetailView
 from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from .forms import CommentForm
 from .models import Category, Product, Gallery, Comment, Brand
+from .services import add_view_product
 
 
 class GetCategoryBrand:
@@ -37,6 +39,7 @@ class ViewProductDetail(DetailView):
     template_name = 'shop/product_detail/detail.html'
     model = Product
 
+    @method_decorator(add_view_product)
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         kwargs = self.kwargs
@@ -44,6 +47,7 @@ class ViewProductDetail(DetailView):
         context['product'] = get_object_or_404(Product, id=kwargs['id'], slug=kwargs['slug'], available=True)
         context['gallery'] = Gallery.objects.filter(product=kwargs['id'])
         context['comments'] = context['product'].comments.filter(active=True)
+        context['request'] = self.request
         return context
 
 
