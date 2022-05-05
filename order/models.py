@@ -13,7 +13,7 @@ class Order(models.Model):
     city = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
     telephone = models.CharField(max_length=50)
-    creation_date = models.DateTimeField(verbose_name='creation date')
+    creation_date = models.DateTimeField(verbose_name='creation date', auto_now_add=True)
     checked_out = models.BooleanField(default=False, verbose_name='checked out')
 
     class Meta:

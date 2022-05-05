@@ -18,10 +18,12 @@ class ViewCreateOrder(FormView):
     def get_context_data(self, **kwargs):
         context = super(ViewCreateOrder, self).get_context_data(**kwargs)
         context['cart'] = self.get_cart()
+        context['order_form'] = OrderForm
         return context
 
     def form_valid(self, form):
         order = form.save(commit=False)
+        order.save()
         cart = self.get_cart()
         for item in cart:
             Item.objects.create(order=order,
