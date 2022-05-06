@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView, ListView, DetailView
-from cart.cart import Cart
+
 from cart.forms import CartAddProductForm
 from .forms import CommentForm
 from .models import Category, Product, Gallery, Comment, Brand

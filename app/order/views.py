@@ -8,7 +8,7 @@ from order.models import Order, Item
 
 
 class ViewCreateOrder(FormView):
-    template_name = 'shop/checkout.html'
+    template_name = 'shop/../shop/templates/shop/checkout.html'
     model = Order
     form_class = OrderForm
 
