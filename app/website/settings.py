@@ -14,9 +14,12 @@ import environ
 
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from celery.schedules import crontab
+
+import website.tasks
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-# reading ..env file
 environ.Env.read_env()
 
 # Quick-start development settings - unsuitable for production
@@ -132,3 +135,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CART_SESSION_ID = 'cart'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "website.tasks.sample_task",
+        "schedule": crontab(minute="*/1"),
+    },
+}
