@@ -5,10 +5,10 @@ from django.views.generic import FormView
 from cart.cart import Cart
 from order.forms import OrderForm
 from order.models import Order, Item
-
+from .tasks import order_created
 
 class ViewCreateOrder(FormView):
-    template_name = 'shop/../shop/templates/shop/checkout.html'
+    template_name = 'shop/checkout.html'
     model = Order
     form_class = OrderForm
 
@@ -30,6 +30,7 @@ class ViewCreateOrder(FormView):
                                 product=item['product'],
                                 price=item['price'],
                                 quantity=item['quantity'])
+        order_created.delay(order.id, order.email)
         cart.clear()
         return super().form_valid(form)
 
