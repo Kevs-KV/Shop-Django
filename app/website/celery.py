@@ -4,6 +4,6 @@ from celery import Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings")
 
-app = Celery("website")
+app = Celery('website', backend='redis', broker='redis://localhost:6379')
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
