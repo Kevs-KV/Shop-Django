@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
-    'order.apps.OrderConfig'
+    'order.apps.OrderConfig',
+    'account.apps.AccountConfig'
 ]
 
 MIDDLEWARE = [
@@ -131,7 +132,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CART_SESSION_ID = 'cart'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
