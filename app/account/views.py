@@ -14,5 +14,3 @@ class LoginUser(LoginView):
         """Security check complete. Log the user in."""
         auth_login(self.request, form.get_user())
         return HttpResponseRedirect(reverse('shop:product_list'))
-
-
