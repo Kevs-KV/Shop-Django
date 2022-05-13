@@ -50,8 +50,11 @@
             </ul>
             <ul class="header-links pull-right">
                 <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'account:view_info_user' %}"><i class="fa fa-user-o"></i> {{ request.user.username }}</a></li>
+                {% else %}
                 <li><a href="{% url 'account:login' %}"><i class="fa fa-user-o"></i> My Account</a></li>
-            </ul>
+                {% endif %}
         </div>
     </div>
     <!-- /TOP HEADER -->
