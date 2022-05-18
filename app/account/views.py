@@ -1,6 +1,7 @@
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
@@ -44,3 +45,23 @@ class ViewCreateUser(FormView):
 
     def get_success_url(self):
         return reverse('shop:product_list')
+
+
+class ViewUserPasswordReset(PasswordResetView):
+    template_name = 'account/reset/password_reset_form.html'
+    email_template_name = 'account/reset/password_reset_email.html'
+    success_url = reverse("account:password_reset_done")
+
+
+class ViewUserPasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'account/reset/password_reset_done.html'
+
+class ViewUserPasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'account/reset/password_reset_confirm.html'
+
+class ViewUserPasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'account/reset/password_reset_complete.html'
+
+
+
+
