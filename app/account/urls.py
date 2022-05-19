@@ -4,7 +4,7 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from account.views import ViewInfoUser, ViewCreateUser, ViewLoginUser, ViewUserPasswordReset, \
-    ViewUserPasswordResetConfirm, ViewUserPasswordResetComplete, ViewUserPasswordChangeDone
+    ViewUserPasswordResetConfirm, ViewUserPasswordResetComplete, ViewUserPasswordChangeDone, ViewUserPasswordChangeView
 
 app_name = 'account'
 
@@ -16,7 +16,8 @@ urlpatterns = [
     path('user/password/reset/', ViewUserPasswordReset.as_view(), name='reset_form'),
     path('user/password/done/', ViewUserPasswordChangeDone.as_view(), name='reset_done'),
     path('user/password/confirm/<uidb64>/<token>/', ViewUserPasswordResetConfirm.as_view(), name='reset_confirm'),
-    path('user/password/complete/', ViewUserPasswordResetComplete.as_view(), name='reset_complete')
+    path('user/password/complete/', ViewUserPasswordResetComplete.as_view(), name='reset_complete'),
+    path('user/password/change/', ViewUserPasswordChangeView.as_view(), name='password_change')
 ]
 
 if settings.DEBUG:
