@@ -1,3 +1,4 @@
+from account.forms import AuthenticationUserForm, CreateUserForm, UserPasswordResetForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView, \
@@ -5,8 +6,6 @@ from django.contrib.auth.views import LoginView, PasswordResetView, PasswordRese
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, FormView
-
-from account.forms import AuthenticationUserForm, CreateUserForm
 
 
 class ViewLoginUser(LoginView):
@@ -51,6 +50,10 @@ class ViewUserPasswordReset(PasswordResetView):
     template_name = 'account/reset/password_reset_form.html'
     email_template_name = 'account/reset/password_reset_email.html'
     success_url = reverse_lazy('account:reset_done')
+    form_class = UserPasswordResetForm
+
+
+
 
 
 class ViewUserPasswordChangeDone(PasswordResetDoneView):
