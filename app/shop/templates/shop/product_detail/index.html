@@ -101,8 +101,11 @@
                                                     {% endif %}
                                         </div>
                                         <div class="product-btns">
-                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
+                                            <form action="{% url 'wishlist:wishlist_add' product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
                                                     class="tooltipp">add to wishlist</span></button>
+                                            </form>
                                             <button class="add-to-compare"><i class="fa fa-exchange"></i><span
                                                     class="tooltipp">add to compare</span></button>
                                             <button class="quick-view" ><i class="fa fa-eye"></i><span class="tooltipp">quick view</span>

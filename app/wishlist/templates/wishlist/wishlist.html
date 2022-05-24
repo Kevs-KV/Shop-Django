@@ -1,0 +1,90 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="products-tabs">
+                        <!-- tab -->
+                        <div id="tab1" class="tab-pane active">
+                            <div class="products-slick" data-nav="#slick-nav-1">
+                                <!-- product -->
+                                {% for wishlist in object_list %}
+                                    <div class="product">
+                                    <form action="{% url 'wishlist:wishlist_remove' wishlist.product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                        </form>
+                                        <div class="product-img">
+                                            <img src="{{ wishlist.product.image.url }}" alt="" class="Image">
+                                            <div class="product-label">
+                                                <span class="sale">-30%</span>
+                                                <span class="new">NEW</span>
+                                            </div>
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ wishlist.product.catecory }}</p>
+                                            <h3 class="product-name"><a
+                                                    href="{{ wishlist.product.get_absolute_url }}">{{ product.name }}</a>
+                                            </h3>
+                                            <h4 class="product-price">{{ wishlist.product.price }}
+                                                <del class="product-old-price">$990.00</del>
+                                            </h4>
+                                            <div class="product-rating">
+                                                {% if wishlist.product.get_rating >= 1 %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o empty"></i>
+                                                {% endif %}
+                                                {% if wishlist.product.get_rating >= 2 %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o empty"></i>
+                                                {% endif %}
+                                                {% if wishlist.product.get_rating >= 3 %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o empty"></i>
+                                                {% endif %}
+                                                {% if wishlist.product.get_rating >= 4 %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o empty"></i>
+                                                {% endif %}
+                                                {% if wishlist.product.get_rating == 5 %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o empty"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="product-btns">
+                                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span
+                                                        class="tooltipp">add to compare</span></button>
+                                                <button class="quick-view"><i class="fa fa-eye"></i><span
+                                                        class="tooltipp">quick view</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="add-to-cart">
+                                            <form action="{% url 'cart:cart_add' wishlist.product.id %}" method="post">
+                                                {{ cart_product_form }}
+                                                {% csrf_token %}
+                                                <button class="add-to-cart-btn">Add<i class="fa fa-shopping-cart"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <!-- /product -->
+                            </div>
+                            <div id="slick-nav-1" class="products-slick-nav"></div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>d
+{% endblock %}
