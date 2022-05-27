@@ -116,8 +116,7 @@ class ViewFilterProductList(ViewProductListForCategory):
         price_min = self.request.GET.get('price-min')
         price_max = self.request.GET.get('price-max')
         return Product.objects.filter(Q(category__name__in=self.request.GET.getlist('category')) |
-                                      Q(products__name__in=self.request.GET.getlist('brand'))).filter(
-            price__range=(price_min, price_max))
+                                      Q(brand__name__in=self.request.GET.getlist('brand'))).filter(price__range=(price_min, price_max))
 
 
 class ViewSearchProductList(ListView):
@@ -125,5 +124,7 @@ class ViewSearchProductList(ListView):
     model = Product
 
     def get_queryset(self):
-        return Product.objects.filter(Q(category__name__in=self.request.GET.getlist('category')) |
-                                      Q(name__icontains=self.request.GET.getlist('product')))
+        if self.request.GET.get('category') == 'all':
+            return Product.objects.filter(name__icontains=self.request.GET.get('product'))
+        return Product.objects.filter(Q(category__name__in=self.request.GET.get('category')) |
+                                      Q(name__icontains=self.request.GET.get('product')))
