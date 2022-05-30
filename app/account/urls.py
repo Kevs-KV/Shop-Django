@@ -3,8 +3,9 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from account.views import ViewInfoUser, ViewCreateUser, ViewLoginUser, ViewUserPasswordReset, \
-    ViewUserPasswordResetConfirm, ViewUserPasswordResetComplete, ViewUserPasswordChangeDone, ViewUserPasswordChangeView
+from account.views import ViewInfoUser, ViewLoginUser, ViewUserPasswordReset, \
+    ViewUserPasswordResetConfirm, ViewUserPasswordResetComplete, ViewUserPasswordChangeDone, ViewUserPasswordChangeView, \
+    ViewSignupUser, ViewUserSingupActivate
 
 app_name = 'account'
 
@@ -12,7 +13,8 @@ urlpatterns = [
     path('login/', ViewLoginUser.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='shop:product_list'), name='logout'),
     path('user/info/', ViewInfoUser.as_view(), name='view_info_user'),
-    path('user/create/', ViewCreateUser.as_view(), name='create_user'),
+    path('user/singup/', ViewSignupUser.as_view(), name='create_user'),
+    path('user/singup/<uidb64>/<token>/', ViewUserSingupActivate.as_view(), name='active_user' ),
     path('user/password/reset/', ViewUserPasswordReset.as_view(), name='reset_form'),
     path('user/password/done/', ViewUserPasswordChangeDone.as_view(), name='reset_done'),
     path('user/password/confirm/<uidb64>/<token>/', ViewUserPasswordResetConfirm.as_view(), name='reset_confirm'),

@@ -1,10 +1,19 @@
 from django import forms
 from django.contrib.auth.forms import (
     AuthenticationForm,
-    PasswordResetForm,
+    PasswordResetForm, UserCreationForm,
 )
+from django.contrib.auth.models import User
 
 from .tasks import send_email_password_reset
+
+
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text='Required')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
 
 
 class AuthenticationUserForm(AuthenticationForm, forms.Form):
