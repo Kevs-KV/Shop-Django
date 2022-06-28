@@ -13,6 +13,7 @@ from django.views import View
 from django.views.generic import TemplateView, FormView
 
 from account.forms import AuthenticationUserForm, UserPasswordResetForm, SignupForm
+from account.tasks import check_activation_new_user
 from account.token import TokenGenerator
 
 
@@ -38,6 +39,7 @@ class ViewSignupUser(FormView):
         user = form.save(commit=False)
         user.is_active = False
         user.save()
+        check_activation_new_user.apply_async(args=[user.pk], countdown=360)
         current_site = get_current_site(self.request)
         mail_subject = 'Activation link has been sent to your email id'
         message = render_to_string('account/acc_active_email.html', {
@@ -61,7 +63,7 @@ class ViewUserSingupActivate(View):
         if user is not None and TokenGenerator().check_token(user, kwargs['token']):
             user.is_active = True
             user.save()
-            return HttpResponse(reverse('shop:product_list'))
+            return HttpResponseRedirect(reverse('account:login'))
         else:
             return HttpResponse('Activation link is invalid!')
 
@@ -80,28 +82,6 @@ class ViewUserSingupActivate(View):
         return user
 
 
-# class ViewCreateUser(FormView):
-#     template_name = 'account/create.html'
-#     form_class = CreateUserForm
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(ViewCreateUser, self).get_context_data(**kwargs)
-#         context['form'] = self.form_class
-#         return context
-#
-#     def form_valid(self, form):
-#         username = form.cleaned_data.get("username")
-#         email = form.cleaned_data.get("email")
-#         password = form.cleaned_data.get("password")
-#         User.objects.create_user(username, email, password)
-#         return super().form_valid(form)
-#
-#     def get_form(self, form_class=None):
-#         self.object = super().get_form(form_class)
-#         return self.object
-#
-#     def get_success_url(self):
-#         return reverse('shop:product_list')
 
 
 class ViewUserPasswordReset(PasswordResetView):
