@@ -5,7 +5,6 @@
         <div class="row">
             <!-- Rating -->
             <div class="col-md-3">
-                    <p>Hello, {{ request.user.username }}</p>
                 <form action="{% url "account:create_user" %}" method='post'>
                     {{ form }}
                     {% csrf_token %}

@@ -4,12 +4,30 @@ from django.contrib.auth.forms import (
     PasswordResetForm, UserCreationForm,
 )
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 from .tasks import send_email_password_reset
 
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField(max_length=200, help_text='Required')
+    error_messages = {
+        "password_mismatch": _("The two password fields didn’t match."),
+    }
+    username = forms.CharField(label=_("Username"),
+                               widget=forms.TextInput(
+                                   attrs={'class': 'input', 'type': 'text', 'placeholder': "Username", }))
+    password1 = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={'class': 'input', 'type': 'text', 'placeholder': "Password", "autocomplete": "new-password"}),
+    )
+    password2 = forms.CharField(
+        label=_("Password confirmation"),
+        widget=forms.PasswordInput(attrs={'class': 'input', 'type': 'text', 'placeholder': "Password", "autocomplete": "new-password", }),
+        strip=False,
+    )
+    email = forms.EmailField(widget=forms.TextInput(
+                                attrs={'class': 'input', 'type': 'email', 'placeholder': "Email",}), max_length=200, help_text='Required')
 
     class Meta:
         model = User
