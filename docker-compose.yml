@@ -11,9 +11,6 @@ services:
       - ./.env
     depends_on:
       - db
-      - redis
-      - celery
-      - celery-beat
   db:
     image: postgres:13.0-alpine
     volumes:
@@ -24,26 +21,24 @@ services:
       - POSTGRES_PASSWORD=kevs
     ports:
       - "5432:5432"
-  redis:
-    image: redis:alpine
+  rabbitmq:
+    image: rabbitmq:3.10.6
+    restart: always
+    container_name: vcd_api_service_rabbitmq
   celery:
     build: .
     command: celery -A website worker -l info
     volumes:
       - ./app/:/usr/src/app/
-    environment:
-      - ./.env
     depends_on:
-      - redis
+      - rabbitmq
   celery-beat:
     build: .
     command: celery -A website beat -l info
     volumes:
       - ./app/:/usr/src/app/
-    environment:
-      - ./.env
     depends_on:
-      - redis
+      - rabbitmq
   dashboard:
     build: .
     volumes:
@@ -51,14 +46,12 @@ services:
     command: >
       bash -c "celery -A website flower --port=5566 && 
       celery -A website flower  --address=0.0.0.0 --port=5566 && 
-      celery -A website flower --broker=redis://guest:guest@localhost:6379/0"
+      celery -A website flower --broker=amqp://rabbitmq:5672"
     ports:
       - "5566:5566"
-    environment:
-      - ./.env
     depends_on:
       - web
-      - redis
+      - rabbitmq
       - celery
 volumes:
   postgres_data:
